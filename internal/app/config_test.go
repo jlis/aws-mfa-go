@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"aws-mfa-go/internal/credentials"
+	"github.com/jlis/aws-mfa-go/internal/credentials"
 )
 
 type mapEnv map[string]string

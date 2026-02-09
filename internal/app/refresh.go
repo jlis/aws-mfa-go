@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"aws-mfa-go/internal/credentials"
+	"github.com/jlis/aws-mfa-go/internal/credentials"
 )
 
 const expirationLayout = "2006-01-02 15:04:05"

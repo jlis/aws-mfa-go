@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"strings"
 
-	"aws-mfa-go/internal/credentials"
+	"github.com/jlis/aws-mfa-go/internal/credentials"
 )
 
 // Inputs are the raw values coming from the CLI layer.

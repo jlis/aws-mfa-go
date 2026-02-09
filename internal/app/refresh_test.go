@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"aws-mfa-go/internal/credentials"
+	"github.com/jlis/aws-mfa-go/internal/credentials"
 )
 
 func TestParseExpirationUTC(t *testing.T) {

@@ -10,8 +10,8 @@ import (
 	"strings"
 	"time"
 
-	"aws-mfa-go/internal/awssts"
-	"aws-mfa-go/internal/credentials"
+	"github.com/jlis/aws-mfa-go/internal/awssts"
+	"github.com/jlis/aws-mfa-go/internal/credentials"
 )
 
 type STSFactory func(ctx context.Context, region, accessKeyID, secretAccessKey string) (awssts.Client, error)

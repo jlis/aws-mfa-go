@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"aws-mfa-go/internal/awssts"
-	"aws-mfa-go/internal/credentials"
+	"github.com/jlis/aws-mfa-go/internal/awssts"
+	"github.com/jlis/aws-mfa-go/internal/credentials"
 )
 
 type fakeSTS struct {
