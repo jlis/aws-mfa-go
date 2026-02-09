@@ -1,0 +1,55 @@
+version: 2
+
+project_name: aws-mfa-go
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: aws-mfa-go
+    main: ./cmd/aws-mfa-go
+    binary: aws-mfa-go
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - id: default
+    builds:
+      - aws-mfa-go
+    format: tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    files:
+      - LICENSE
+      - README.md
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  disable: true
+
+brews:
+  - name: aws-mfa-go
+    homepage: "https://github.com/jlis/aws-mfa-go"
+    description: "Minimal AWS MFA helper for the CLI (STS GetSessionToken -> ~/.aws/credentials)"
+    license: "MIT"
+    install: |
+      bin.install "aws-mfa-go"
+    test: |
+      system "#{bin}/aws-mfa-go", "--help"
+    repository:
+      owner: jlis
+      name: homebrew-tap
+      branch: main
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    commit_author:
+      name: "goreleaserbot"
+      email: "goreleaserbot@users.noreply.github.com"
+
