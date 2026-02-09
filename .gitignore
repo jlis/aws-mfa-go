@@ -1,3 +1,4 @@
-aws-mfa-go
+/aws-mfa-go
+/aws-mfa-go.exe
+/dist
 *.exe
-
