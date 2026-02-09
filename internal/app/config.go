@@ -82,7 +82,7 @@ func Resolve(ctx context.Context, in Inputs, env Env, store *credentials.Store) 
 	if in.DurationSecondsChanged && in.DurationSeconds > 0 {
 		duration = int32(in.DurationSeconds)
 	} else if v := strings.TrimSpace(env.Get("MFA_STS_DURATION")); v != "" {
-		parsed, err := strconv.Atoi(v)
+		parsed, err := strconv.ParseInt(v, 10, 32)
 		if err != nil || parsed <= 0 {
 			return Resolved{}, fmt.Errorf("invalid MFA_STS_DURATION %q", v)
 		}
