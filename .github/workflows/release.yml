@@ -21,7 +21,11 @@ jobs:
         uses: actions/setup-go@v5
         with:
           # Use a supported Go release line for security fixes.
-          go-version: "1.25.x"
+          go-version: "1.25.7"
+          check-latest: true
+
+      - name: Go version
+        run: go version
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v6
