@@ -55,7 +55,7 @@ homebrew_casks:
     repository:
       owner: jlis
       name: homebrew-tap
-      branch: main
+      branch: master
       token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
     commit_author:
       name: "goreleaserbot"
