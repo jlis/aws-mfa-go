@@ -21,9 +21,10 @@ builds:
 
 archives:
   - id: default
-    builds:
+    ids:
       - aws-mfa-go
-    format: tar.gz
+    formats:
+      - 'tar.gz'
     name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
     files:
       - LICENSE
@@ -35,21 +36,17 @@ checksum:
 changelog:
   disable: true
 
-brews:
-  - name: aws-mfa-go
-    homepage: "https://github.com/jlis/aws-mfa-go"
-    description: "Minimal AWS MFA helper for the CLI (STS GetSessionToken -> ~/.aws/credentials)"
-    license: "MIT"
-    install: |
-      bin.install "aws-mfa-go"
-    test: |
-      system "#{bin}/aws-mfa-go", "--help"
-    repository:
-      owner: jlis
-      name: homebrew-tap
-      branch: main
-      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
-    commit_author:
-      name: "goreleaserbot"
-      email: "goreleaserbot@users.noreply.github.com"
+homebrew_casks:
+- name: faws-mfa-goo
+  directory: Casks
+
+  url:
+    verified: github.com/jlis/aws-mfa-go
+
+  hooks:
+    post:
+      install: |
+        if OS.mac?
+          system_command "/usr/bin/xattr", args: ["-dr", "com.apple.quarantine", "#{staged_path}/aws-mfa-go"]
+        end
 
