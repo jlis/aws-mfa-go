@@ -14,19 +14,28 @@ This is inspired by (and aims to be compatible with the core workflow of) [`broa
 
 ## Install
 
-From this repo:
+### Homebrew (macOS)
+
+```bash
+brew tap jlis/tap
+brew install aws-mfa-go
+```
+
+### From source
+
+Install the latest version with Go:
+
+```bash
+go install github.com/jlis/aws-mfa-go/cmd/aws-mfa-go@latest
+aws-mfa-go --help
+```
+
+Build from a local checkout:
 
 ```bash
 go test ./...
 go build -o aws-mfa-go ./cmd/aws-mfa-go
 ./aws-mfa-go --help
-```
-
-Or install into your Go bin dir:
-
-```bash
-go install ./cmd/aws-mfa-go
-aws-mfa-go --help
 ```
 
 ## Credentials file setup
