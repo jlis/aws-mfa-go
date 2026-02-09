@@ -73,7 +73,7 @@ func Run(ctx context.Context, in RunInputs, deps Deps) error {
 		return err
 	}
 
-	fmt.Fprintf(deps.Stdout, "INFO - Using profile: %s\n", resolved.ShortTermSection)
+	_, _ = fmt.Fprintf(deps.Stdout, "INFO - Using profile: %s\n", resolved.ShortTermSection)
 
 	ltKeyID, err := store.MustGet(resolved.LongTermSection, "aws_access_key_id")
 	if err != nil {
@@ -89,24 +89,24 @@ func Run(ctx context.Context, in RunInputs, deps Deps) error {
 	if !dec.ShouldRefresh {
 		// Match upstream-ish wording.
 		if dec.Remaining != nil && dec.ExpiresAt != nil {
-			fmt.Fprintf(deps.Stdout,
+			_, _ = fmt.Fprintf(deps.Stdout,
 				"INFO - Your credentials are still valid for %.0f seconds they will expire at %s\n",
 				dec.Remaining.Seconds(),
 				dec.ExpiresAt.Format(expirationLayout),
 			)
 			return nil
 		}
-		fmt.Fprintln(deps.Stdout, "INFO - Your credentials are still valid.")
+		_, _ = fmt.Fprintln(deps.Stdout, "INFO - Your credentials are still valid.")
 		return nil
 	}
 
 	switch dec.Reason {
 	case "expired":
-		fmt.Fprintln(deps.Stdout, "INFO - Your credentials have expired, renewing.")
+		_, _ = fmt.Fprintln(deps.Stdout, "INFO - Your credentials have expired, renewing.")
 	case "short-term section missing":
-		fmt.Fprintf(deps.Stdout, "INFO - Short term credentials section [%s] is missing, obtaining new credentials.\n", resolved.ShortTermSection)
+		_, _ = fmt.Fprintf(deps.Stdout, "INFO - Short term credentials section [%s] is missing, obtaining new credentials.\n", resolved.ShortTermSection)
 	default:
-		fmt.Fprintln(deps.Stdout, "INFO - Obtaining new credentials.")
+		_, _ = fmt.Fprintln(deps.Stdout, "INFO - Obtaining new credentials.")
 	}
 
 	token := strings.TrimSpace(resolved.Token)
@@ -164,7 +164,7 @@ func Run(ctx context.Context, in RunInputs, deps Deps) error {
 		return err
 	}
 
-	fmt.Fprintf(deps.Stdout, "INFO - Success! Your credentials will expire in %d seconds at: %s\n",
+	_, _ = fmt.Fprintf(deps.Stdout, "INFO - Success! Your credentials will expire in %d seconds at: %s\n",
 		resolved.DurationSeconds,
 		out.Expiration.UTC().Format(time.RFC3339),
 	)
@@ -172,7 +172,7 @@ func Run(ctx context.Context, in RunInputs, deps Deps) error {
 }
 
 func promptToken(stdout io.Writer, stdin io.Reader, device string, duration int32) (string, error) {
-	fmt.Fprintf(stdout, "Enter AWS MFA code for device [%s] (renewing for %d seconds):", device, duration)
+	_, _ = fmt.Fprintf(stdout, "Enter AWS MFA code for device [%s] (renewing for %d seconds):", device, duration)
 	r := bufio.NewReader(stdin)
 	line, err := r.ReadString('\n')
 	if err != nil && !errors.Is(err, io.EOF) {

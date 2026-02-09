@@ -134,5 +134,8 @@ Run linter:
 golangci-lint run
 ```
 
-Note: this repo targets Go 1.20.x; use `golangci-lint` `v1.54.2` (newer versions may require newer Go).
+Note: this repo builds with Go 1.20+, but CI runs on a supported Go release line for the latest security fixes.
+
+If you install `golangci-lint`, use a recent version that supports your Go version.
+
 

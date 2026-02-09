@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 
@@ -80,7 +81,11 @@ func Resolve(ctx context.Context, in Inputs, env Env, store *credentials.Store) 
 
 	duration := int32(0)
 	if in.DurationSecondsChanged && in.DurationSeconds > 0 {
-		duration = int32(in.DurationSeconds)
+		v := int64(in.DurationSeconds)
+		if v > math.MaxInt32 {
+			return Resolved{}, fmt.Errorf("invalid duration %d: too large", in.DurationSeconds)
+		}
+		duration = int32(v) //nolint:gosec // G115: bounded by MaxInt32 check above
 	} else if v := strings.TrimSpace(env.Get("MFA_STS_DURATION")); v != "" {
 		parsed, err := strconv.ParseInt(v, 10, 32)
 		if err != nil || parsed <= 0 {
