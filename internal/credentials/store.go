@@ -28,8 +28,12 @@ func Load(path string) (*Store, error) {
 	}
 
 	opts := ini.LoadOptions{
-		// AWS files are typically lowercase keys; keep the same behavior.
-		Insensitive:         true,
+		// Keep keys case-insensitive, but keep section names case-sensitive.
+		//
+		// Important: if we lower-case section names, a profile named "default"
+		// may be treated as ini's DEFAULT section, which would be written without
+		// a [default] header. The AWS CLI requires an explicit [default] section.
+		InsensitiveKeys:     true,
 		IgnoreInlineComment: false,
 	}
 
