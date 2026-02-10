@@ -2,6 +2,9 @@
 
 Minimal, fast AWS MFA helper for the CLI.
 
+[![](https://img.shields.io/github/actions/workflow/status/jlis/aws-mfa-go/ci.yml?branch=master&longCache=true&label=Test&logo=github%20actions&logoColor=fff)](https://github.com/jlis/aws-mfa-go/actions?query=workflow%3Aci)
+[![Go Report Card](https://goreportcard.com/badge/github.com/jlis/aws-mfa-go)](https://goreportcard.com/report/github.com/jlis/aws-mfa-go)
+
 This is inspired by (and aims to be compatible with the core workflow of) [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa), but implemented in Go so you can install a single binary.
 
 ## What it does
@@ -63,6 +66,12 @@ Refresh credentials for a profile:
 
 ```bash
 aws-mfa-go --profile prod
+```
+
+Show version:
+
+```bash
+aws-mfa-go --version
 ```
 
 Non-interactive (CI-ish) usage:

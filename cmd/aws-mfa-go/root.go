@@ -9,6 +9,10 @@ import (
 	"github.com/spf13/pflag"
 )
 
+// version is overridden at build time using -ldflags.
+// Example: go build -ldflags "-X main.version=v0.1.0" ./cmd/aws-mfa-go
+var version = "dev"
+
 // Execute runs the root command.
 func Execute() {
 	rootCmd := newRootCmd()
@@ -57,6 +61,9 @@ func newRootCmd() *cobra.Command {
 			}, deps)
 		},
 	}
+
+	cmd.Version = version
+	cmd.SetVersionTemplate("{{.Version}}\n")
 
 	cmd.Flags().StringVar(&profile, "profile", "", "AWS profile name (env: AWS_PROFILE, default: default)")
 	cmd.Flags().StringVar(&device, "device", "", "MFA device ARN/serial (env: MFA_DEVICE, or aws_mfa_device in long-term section)")

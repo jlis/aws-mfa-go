@@ -10,6 +10,8 @@ builds:
   - id: aws-mfa-go
     main: ./cmd/aws-mfa-go
     binary: aws-mfa-go
+    ldflags:
+      - -s -w -X main.version={{ .Tag }}
     env:
       - CGO_ENABLED=0
     goos:
