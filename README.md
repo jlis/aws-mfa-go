@@ -22,6 +22,7 @@ This is inspired by (and aims to be compatible with the core workflow of) [`broa
 ```bash
 brew tap jlis/tap
 brew install aws-mfa-go
+aws-mfa-go --help
 ```
 
 ### From source
@@ -39,6 +40,15 @@ Build from a local checkout:
 go test ./...
 go build -o aws-mfa-go ./cmd/aws-mfa-go
 ./aws-mfa-go --help
+```
+
+## Upgrade
+
+### Homebrew (macOS)
+
+```bash
+brew update
+brew upgrade aws-mfa-go
 ```
 
 ## Credentials file setup
@@ -119,15 +129,6 @@ This will write short-term credentials into:
 - `[myorg-staging]`
 
 …while reading long-term credentials from `[myorg]`.
-
-## Shell completion
-
-Cobra provides a built-in completion command:
-
-```bash
-aws-mfa-go completion zsh
-aws-mfa-go completion bash
-```
 
 ## Development
 
