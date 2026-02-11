@@ -14,8 +14,7 @@ Inspired by [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa), implement
 1) Install:
 
 ```bash
-brew tap jlis/tap
-brew install aws-mfa-go
+brew install jlis/tap/aws-mfa-go
 ```
 
 2) Add long-term credentials to `~/.aws/credentials`:
@@ -48,8 +47,7 @@ You’ll be prompted for your 6-digit MFA code, and short-term credentials will 
 ### Homebrew (macOS)
 
 ```bash
-brew tap jlis/tap
-brew install aws-mfa-go
+brew install jlis/tap/aws-mfa-go
 ```
 
 ### Upgrade (Homebrew)
