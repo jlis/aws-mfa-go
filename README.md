@@ -1,11 +1,39 @@
 # aws-mfa-go
 
-Minimal, fast AWS MFA helper for the CLI.
+Minimal AWS MFA helper for the CLI.
 
 [![](https://img.shields.io/github/actions/workflow/status/jlis/aws-mfa-go/ci.yml?branch=master&longCache=true&label=Test&logo=github%20actions&logoColor=fff)](https://github.com/jlis/aws-mfa-go/actions?query=workflow%3Aci)
 [![Go Report Card](https://goreportcard.com/badge/github.com/jlis/aws-mfa-go)](https://goreportcard.com/report/github.com/jlis/aws-mfa-go)
 
-This is inspired by (and aims to be compatible with the core workflow of) [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa), but implemented in Go so you can install a single binary.
+`aws-mfa-go` refreshes temporary AWS credentials using MFA and writes them to `~/.aws/credentials`.
+
+Inspired by [`broamski/aws-mfa`](https://github.com/broamski/aws-mfa), implemented in Go as a single binary.
+
+## Quick start (2 minutes)
+
+1) Install:
+
+```bash
+brew tap jlis/tap
+brew install aws-mfa-go
+```
+
+2) Add long-term credentials to `~/.aws/credentials`:
+
+```ini
+[prod-long-term]
+aws_access_key_id = YOUR_LONGTERM_KEY_ID
+aws_secret_access_key = YOUR_LONGTERM_SECRET
+aws_mfa_device = arn:aws:iam::123456789012:mfa/your-user
+```
+
+3) Run:
+
+```bash
+aws-mfa-go --profile prod
+```
+
+You’ll be prompted for your 6-digit MFA code, and short-term credentials will be written to `[prod]`.
 
 ## What it does
 
@@ -22,60 +50,55 @@ This is inspired by (and aims to be compatible with the core workflow of) [`broa
 ```bash
 brew tap jlis/tap
 brew install aws-mfa-go
-aws-mfa-go --help
 ```
 
-### From source
-
-Install the latest version with Go:
-
-```bash
-go install github.com/jlis/aws-mfa-go/cmd/aws-mfa-go@latest
-aws-mfa-go --help
-```
-
-Build from a local checkout:
-
-```bash
-go test ./...
-go build -o aws-mfa-go ./cmd/aws-mfa-go
-./aws-mfa-go --help
-```
-
-## Upgrade
-
-### Homebrew (macOS)
+### Upgrade (Homebrew)
 
 ```bash
 brew update
 brew upgrade aws-mfa-go
 ```
 
-## Credentials file setup
+### Alternative: install with Go
 
-`aws-mfa-go` follows the same convention as `aws-mfa`:
+```bash
+go install github.com/jlis/aws-mfa-go/cmd/aws-mfa-go@latest
+```
 
-- Long-term section: `<profile>-long-term` (default)
-- Short-term section: `<profile>` (default)
-
-Example (`~/.aws/credentials`):
+## Minimal configuration
 
 ```ini
 [prod-long-term]
 aws_access_key_id = YOUR_LONGTERM_KEY_ID
 aws_secret_access_key = YOUR_LONGTERM_SECRET
 aws_mfa_device = arn:aws:iam::123456789012:mfa/your-user
-
-[prod]
-# short-term keys will be written here by aws-mfa-go
 ```
 
-## Usage
+Required keys in your long-term section:
+- `aws_access_key_id`
+- `aws_secret_access_key`
+- `aws_mfa_device`
 
-Refresh credentials for a profile:
+Short-term credentials are written automatically to `[<profile>]` (for example `[prod]`).
+
+## Common usage
+
+Refresh credentials:
 
 ```bash
 aws-mfa-go --profile prod
+```
+
+Force refresh:
+
+```bash
+aws-mfa-go --profile prod --force
+```
+
+Non-interactive:
+
+```bash
+aws-mfa-go --profile prod --token 123456
 ```
 
 Show version:
@@ -84,53 +107,45 @@ Show version:
 aws-mfa-go --version
 ```
 
-Non-interactive (CI-ish) usage:
-
-```bash
-aws-mfa-go --profile prod --token 123456
-```
-
-Force refresh even if credentials are still valid:
-
-```bash
-aws-mfa-go --profile prod --force
-```
-
 ## Configuration precedence
 
-Like upstream `aws-mfa`, precedence is:
+`aws-mfa-go` uses:
 
 **flags > environment variables > `~/.aws/credentials` values > defaults**
 
-Supported environment variables:
-
+Environment variables:
 - `AWS_PROFILE`
 - `MFA_DEVICE`
 - `MFA_STS_DURATION`
-- `AWS_REGION` / `AWS_DEFAULT_REGION` (region used for STS client; defaults to `us-east-1`)
+- `AWS_REGION` / `AWS_DEFAULT_REGION` (defaults to `us-east-1`)
 
-## Profile suffixes (advanced)
+## Advanced profile suffixes
 
-Override how long-term/short-term sections are derived:
+By default:
+- long-term section: `<profile>-long-term`
+- short-term section: `<profile>`
 
-- `--long-term-suffix` (default `long-term`, use `none` to use `<profile>` as the long-term section)
+Override this with:
+- `--long-term-suffix` (default `long-term`, use `none` to use `<profile>`)
 - `--short-term-suffix` (default `none`, when set uses `<profile>-<suffix>`)
 
-Example: share one long-term section and mint multiple short-term sections:
+Example:
 
 ```bash
 aws-mfa-go --profile myorg --long-term-suffix none --short-term-suffix production
 aws-mfa-go --profile myorg --long-term-suffix none --short-term-suffix staging
 ```
 
-This will write short-term credentials into:
-
-- `[myorg-production]`
-- `[myorg-staging]`
-
-…while reading long-term credentials from `[myorg]`.
+This writes short-term credentials to `[myorg-production]` and `[myorg-staging]`, while reading long-term credentials from `[myorg]`.
 
 ## Development
+
+Build from local checkout:
+
+```bash
+make build
+./aws-mfa-go --help
+```
 
 Run tests:
 
@@ -141,11 +156,9 @@ make test
 Run linter:
 
 ```bash
-golangci-lint run
+make lint
 ```
 
 Note: this repo builds with Go 1.20+, but CI runs on a supported Go release line for the latest security fixes.
-
-If you install `golangci-lint`, use a recent version that supports your Go version.
 
 
